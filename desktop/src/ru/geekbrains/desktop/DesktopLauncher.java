@@ -7,8 +7,8 @@ import ru.geekbrains.StarGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.height = 750;
-		config.width = 1000;
+		config.height = 650;
+		config.width = 900;
 		new LwjglApplication(new StarGame(), config);
 	}
 }
