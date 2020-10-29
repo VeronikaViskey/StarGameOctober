@@ -1,54 +1,63 @@
 package ru.geekbrains.screen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.base.BaseScreen;
+import ru.geekbrains.math.Rect;
+import ru.geekbrains.sprite.Background;
+import ru.geekbrains.sprite.Logo;
 
 public class MenuScreen extends BaseScreen {
 
+    private Texture bg;
     private Texture img;
-    private Vector2 pos;
-    private Vector2 position;
-    private Vector2 v;
+    private Background background;
+    private Logo logo;
 
     @Override
     public void show() {
         super.show();
+        bg = new Texture("bg.jpg");
+        background = new Background(bg);
         img = new Texture("badlogic.jpg");
-        pos = new Vector2();
-        position = new Vector2();
-        v = new Vector2();
+        logo = new Logo(img);
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
-        batch.begin();
-        batch.draw(img, pos.x, pos.y);
-        batch.end();
-        if (position.cpy().sub(pos).len() <= v.len()){
-            pos.set(position);
-        } else {
-            pos.add(v);
-        }
+        update(delta);
+        draw();
+    }
+
+    @Override
+    public void resize(Rect worldBounds) {
+        background.resize(worldBounds);
+        logo.resize(worldBounds);
     }
 
     @Override
     public void dispose() {
+        bg.dispose();
+        img.dispose();
         super.dispose();
     }
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        position.set(screenX, Gdx.graphics.getHeight() - screenY);
-        v = position.cpy().sub(pos).nor();
-        return super.touchDown(screenX, screenY, pointer, button);
+    public boolean touchDown(Vector2 touch, int pointer, int button) {
+        logo.touchDown(touch, pointer, button);
+        return false;
+    }
+    private void update(float delta) {
+        logo.update(delta);
     }
 
-    @Override
-    public boolean keyDown(int keycode) {
-        return super.keyDown(keycode);
+    private void draw() {
+        batch.begin();
+        background.draw(batch);
+        logo.draw(batch);
+        batch.end();
     }
 }
